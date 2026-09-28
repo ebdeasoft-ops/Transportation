@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
 
         
         $this->call([
+            \Database\Seeders\SettingsSeeder::class,
             Exoensesresoans::class,
             CustomerSeeder::class,
             AvtSeeder::class,
