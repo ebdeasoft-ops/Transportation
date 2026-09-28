@@ -31,7 +31,8 @@ class DatabaseSeeder extends Seeder
             PermissionTableSeeder::class,
             Campanyinfo::class,
             CreateAdminUserSeeder::class,
-            Exoensesresoans::class
+            Exoensesresoans::class,
+            WaybillAndTripsSeeder::class
         ]);
     }
 }

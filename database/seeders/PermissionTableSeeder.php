@@ -2,8 +2,7 @@
 
 namespace Database\Seeders;
 use Spatie\Permission\Models\Permission;
-
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 
 class PermissionTableSeeder extends Seeder
@@ -15,80 +14,29 @@ class PermissionTableSeeder extends Seeder
      */
     public function run()
     {
-    
-    
-    $permissions = [
-    
-        'Home',
+        // مسح الصلاحيات القديمة تماماً لضمان عدم وجود أي صلاحيات غير مستخدمة (Sales, Purchases, Products... الخ)
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::table('role_has_permissions')->truncate();
+        DB::table('permissions')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        'Sales' ,
-        'Sales products',
-        'sales return',
-        'Previous sales invoices',
+        $permissions = [
+            'Home',
 
-
-        'Purchases',
-        'Purchases products',
-        'purchase return',
-        'purchase order to resources',
-        'Previous purchase invoices',
-
-
-        'Quotations',
-        'request price from supplier',
-        'offer price to customer',
-
-
-        'Available quantity',
-
-
-        'Receipt',
-        'Confirm product delivery',
-        'Previous receipt documents',
-
-
-        'Produects',
-        'product damage',
-        'Stock adjustment',
-        'Product data change',
-        'Transferring a product to another branch',
-        'Receiving a product from another branch',
-
-
-        'Reports',
-        'budget sheet',
-        'Transfers to master branch',
-        'Customer exceeded grace period',
-        'Bank Statement',
-        'Transfer cash to a bank Rep',
-        'Sales report',
-        'Bank transfers',
-        'Sales return report',
-        'Product sales',
-        'Employee sales',
-        'Sales profit',
-        'Purchase orders from suppliers',
-        'A price offer to the customer',
-        'Delivery notes',
-        'Request a quote from supplier',
-        'Puchases from supplier',
-       'Refound of resource purchases',
-       'Purchases report',
-        'Customer purchases',
-        'Credit collection',
-        'List of suppliers',
-        'List of customers',
-        'Supplier credit payment',
-        'Shift details',
-         'Expenses',
-        'stok quantity',
-        'Product damage reports',
-        'Transfer of products',
-        'Best selling product',
-        'VAT',
-    
-    
-
+            'Reports',
+            'budget sheet',
+            'Bank Statement',
+            'Transfer cash to a bank Rep',
+            'Bank transfers',
+            'Credit collection',
+            'List of suppliers',
+            'List of customers',
+            'Supplier credit payment',
+            'Shift details',
+            'Expenses',
+            'VAT',
 
             'Accounts',
             'Receipt document',
@@ -100,16 +48,12 @@ class PermissionTableSeeder extends Seeder
             'Confirm transfer of master branch',
             'Transfer cash to a bank',
             'Transfer cash to the next day',
-    
-
 
             'User and branches',
             'Create a new branch',
             'add branch',
             'List of users',
-            'Create a vendor',
             'Users permissions',
-    
 
             'Human Resource',
             'Employee',
@@ -117,104 +61,44 @@ class PermissionTableSeeder extends Seeder
             'create a department',
             'Increase or deduction',
             'Salary document',
-    
+            'Attendances',
+            'Leaves',
+            'Contracts',
+            'Custodies',
+            'End of services',
+            'HR settings',
 
-
-            'Subprocesses',
-            'Add new product',
-            'Add a new customer',
-            'Add new supplier',
-            'enpenses_reason',
-
-           
-
-
+            'Transportation',
+            'Waybills',
+            'Truck trips',
+            'Transport invoices',
+            'Trucks',
+            'Drivers',
 
             'Setting',
             'AVT',
             'System setting',
             'Branches',
             
-
             'Technical support',
-
-
-
             'Notification',
-    
-    ];
-    
-    $permissions_ar = [
-    
-        'الرئيسية',
+        ];
 
-        'المبيعات' ,
-        'المبيعات',
-        'مرتجع المبيعات',
-        'فواتير المبيعات السابقة',
+        $permissions_ar = [
+            'الرئيسية',
 
-        'المشتريات',
-        'المشتريات',
-        'مرتجع المشتريات',
-        'أمر شراء الي المورد',
-        'فواتير المشتريات السابقة',
-
-
-        'التسعيرات',
-        'طلب اسعار من المورد',
-        'عرض اسعار للعميل',
-
-
-        'عرض الكمية المتوفرة للعميل',
-
-
-        'سند استلام',
-        "تاكيد تسليم منتج",
-        'المستندات الاستلام السابقة',
-
-
-        'المنتجات',
-        'اتلاف منتج',
-        'تعديل كمية المخزون',
-        'تغير بيانات المنتج',
-        'ارسال منتج الي فرع اخري',
-        'استلام منتج من فرع اخري',
-
-
-        'التقارير',
-        'الميزانية العمومية',
-        "التحويلات لفرع الرئيسي",
-        'العملاء تجاوزة فترة السماح',
-        'كشف الحساب البنكي',
-        " ايداع من  البنك",
-        "تحويل نقدي الصندوق الي البنك",
-        'مبيعات المنتجات',
-        'مرتجع المبيعات',
-        'مبيعات منتج',
-        'مبيعات موظف',
-       'أرباح المبيعات',
-       'أوامر الشراء من الموردين',
-        'تقرير عرض أسعار للعميل',
-        'ملاحظات التسليم',
-        'طلبات عرض سعر من المواردين',
-        'مشتريات من مورد',
-        'مرتجع مشتريات من  مورد',
-         'مشتريات البضاعة',
-        'مشتريات العملاء',
-        'تحصيل الأجل',
-        'قائمة الموردين',
-        'قائمة العملاء',
-        'الدفع الأجل للمورد',
-        'تفاصيل الوردية',
-        'المصروفات',
-        'كمية وقيمة المخزون',
-        ' تقارير اتلاف المنتجات',
-        "حركة المنتجات بين الفروع",
-        'منتجات الأكثر مبيعا',
-        'ضريبة القيمة المضافة',
-    
-    
-
+            'التقارير',
+            'الميزانية العمومية',
+            'كشف الحساب البنكي',
+            'ايداع من البنك',
+            'تحويل نقدي الصندوق الي البنك',
+            'تحصيل الأجل',
+            'قائمة الموردين',
+            'قائمة العملاء',
+            'الدفع الأجل للمورد',
+            'تفاصيل الوردية',
+            'المصروفات',
+            'ضريبة القيمة المضافة',
 
             'الحسابات',
             'سند صرف',
@@ -224,18 +108,14 @@ class PermissionTableSeeder extends Seeder
             'اضافة نقدي من البنك',
             'التحويل إلى الفرع الرئيسي',
             'تاكيد التحويل لفرع الرئيسي',
-            "تحويل نقدي الصندوق لبنك",
-            "ترحيل النقدية ليوم التالي",
-    
-
+            'تحويل نقدي الصندوق لبنك',
+            'ترحيل النقدية ليوم التالي',
 
             'المستخدمين و الفروع',
             'إنشاء فرع جديد',
             'اضافة فرع',
             'قائمة المستخدمين',
-            'إنشاء بائع',
             'صلاحيات المستخدمين',
-    
 
             'الموارد البشرية',
             'قائمة الموظفين',
@@ -243,42 +123,37 @@ class PermissionTableSeeder extends Seeder
             'انشاء قسم جديد',
             'زيادة او خصم للموظف',
             'مستند المرتبات',
-    
+            'الحضور والانصراف',
+            'الإجازات',
+            'العقود',
+            'العهد',
+            'نهاية الخدمة',
+            'إعدادات الموارد البشرية',
 
-
-            'العمليات الفرعية',
-            'اضافة منتج جديد',
-            'اضافة عميل جديد',
-            'اضافة مورد جديد',
-            'اضافة غرض الصرف',
-
-           
-
-
+            'النقل والشحن',
+            'بوليصات الشحن',
+            'رحلات الشاحنات',
+            'فواتير النقل',
+            'الشاحنات',
+            'السائقين',
 
             'الاعدادت',
             'الضريبة',
             'اعدادات النظام',
             'الفروع',
             
-
             'التواصل مع الدعم الفني',
-
-
-
             'الاشعارات',
-    
-    ];
+        ];
       
-
-    $i=0;
-    foreach ($permissions as $permission) {
-    
-    Permission::create(['name' => $permission,'name_ar'=>$permissions_ar[$i]]);
-    $i++;
+        $i = 0;
+        foreach ($permissions as $permission) {
+            Permission::create(['name' => $permission, 'name_ar' => $permissions_ar[$i]]);
+            $i++;
+        }
+        
+        // إعادة ربط الصلاحيات الجديدة للمدير
+        $role = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'Admin']);
+        $role->syncPermissions(Permission::all());
     }
-    
-    
-    }
-    }
-
+}

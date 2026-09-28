@@ -54,39 +54,46 @@ use App\Http\Controllers\DashboardController;
 
 
 
-$setting = settings::find(1);
+try {
+    if (\Illuminate\Support\Facades\Schema::hasTable('settings')) {
+        $setting = settings::find(1);
+        if ($setting) {
+            define('postal_number', $setting->postal_number);
+            define('street_name', $setting->street_name);
+            define('building_number', $setting->building_number);
+            define('plot_identification', $setting->plot_identification);
+            define('region', $setting->region);
+            define('city', $setting->city);
+        }
+    }
+    
+    if (\Illuminate\Support\Facades\Schema::hasTable('system_settings')) {
+        $system_setting = system_setting::find(1);
+        if ($system_setting) {
+            define('serviceCost', $system_setting->serviceCost);
+            define('bank_acount_iban', $system_setting->bank_acount_iban);
+            define('bank_acount_number', $system_setting->bank_acount_number);
+            define('bankname', $system_setting->bankname);
+            define('Namear', $system_setting->name_ar);
+            define('describtionar', $system_setting->descriptionarbic);
+            define('STar', ' س . ت  :' . $system_setting->SR);
+            define('Taxar', '  الرقم الضريبي : ' . $system_setting->Tax);
+            define('TaxQrCode', $system_setting->Tax);
+            define('sallerQrCode', $system_setting->name_ar);
+            define('Nameen', $system_setting->name_en);
+            define('describtionen', $system_setting->descriptionenglish);
+            define('STen', '  C.R : ' . $system_setting->SR);
+            define('Taxen', 'VAT Number : ' . $system_setting->Tax);
+            define('addressar', $system_setting->address_ar);
+            define('addressen', $system_setting->address_en);
+            define('camplogo', $system_setting->logo);
+        }
+    }
+} catch (\Throwable $e) {}
 
-define('postal_number', $setting->postal_number);
-define('street_name', $setting->street_name);
-define('building_number', $setting->building_number);
-define('plot_identification', $setting->plot_identification);
-define('region', $setting->region);
-define('city', $setting->city);
-
-
-$system_setting = system_setting::find(1);
-define('PAGINATION_COUNT', 20);
-define('serviceCost', $system_setting->serviceCost);
-
-
-define('bank_acount_iban', $system_setting->bank_acount_iban);
-define('bank_acount_number', $system_setting->bank_acount_number);
-define('bankname', $system_setting->bankname);
-define('Namear', $system_setting->name_ar);
-define('describtionar', $system_setting->descriptionarbic);
-define('STar', ' س . ت  :' . $system_setting->SR);
-define('Taxar', '  الرقم الضريبي : ' . $system_setting->Tax);
-define('TaxQrCode', $system_setting->Tax);
-define('sallerQrCode', $system_setting->name_ar);
-
-
-define('Nameen', $system_setting->name_en);
-define('describtionen', $system_setting->descriptionenglish);
-define('STen', '  C.R : ' . $system_setting->SR);
-define('Taxen', 'VAT Number : ' . $system_setting->Tax);
-define('addressar', $system_setting->address_ar);
-define('addressen', $system_setting->address_en);
-define('camplogo', $system_setting->logo);
+if (!defined('PAGINATION_COUNT')) {
+    define('PAGINATION_COUNT', 20);
+}
 
     Route::get('get_all_kid_yaomy_jax', [AcountesController::class, 'get_all_kid_yaomy_jax']);
     Route::get('search_by_decoumentNo_kid_yomy/{id}', [AcountesController::class, 'search_by_decoumentNo_kid_yomy']);
