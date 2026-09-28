@@ -1,0 +1,282 @@
+@extends('layouts.master')
+@section('css')
+    <style>
+        @media print {
+            #print_Button {
+                display: none;
+            }
+        }
+        body {
+font: 13pt Georgia, "Times New Roman", Times, serif;
+line-height: 1.5;
+border-style: solid;
+
+}
+    </style>
+@endsection
+@section('title')
+    معاينه طباعة المنتجات
+@stop
+@section('page-header')
+    <!-- breadcrumb -->
+    <div class="breadcrumb-header justify-content-between">
+    </div>
+    <!-- breadcrumb -->
+@endsection
+@section('content')
+    <!-- row -->
+    <div class="row row-sm">
+        <div class="col-md-12 col-xl-12">
+            <div class=" main-content-body-invoice" id="print">
+                <div class="card card-invoice">
+                       <div class="d-flex justify-content-center">
+                            <button class="btn btn-danger print-style float-left mt-3 mr-2" id="print_Button" onclick="printDiv()">
+                                {{ __('home.print') }}
+                                <i class="mdi mdi-printer ml-1"></i>
+                        </div>
+                        <br>
+
+                    <div class="card-body">
+                                  <div class="invoice-header" style="display: flex;justify-content:space-between;width:100%">
+
+<div class="billed-from" style="width:33%;text-align: center;" >
+    <br>
+     <span style="font-size:18px">{{Nameen}}</span>
+    <br>
+    <p dir=ltr> {{describtionen}} </p>
+    <span dir=ltr>{{STen}} </span>
+    <p dir=ltr> {{Taxen}} </p>
+
+</div>
+<div class="row">
+<?php
+$logo=camplogo;
+?>
+<a href="https://ebdeasoft.com/"><img src="{{ asset('assets\img\brand').'/'.$logo }}" class="logo-1" alt="logo" style="width: 110px; height: 70px;"></a>
+
+</div>
+
+
+<div class="billed-from" style="width:33%;text-align: center;">
+    <br>
+
+   <span style="font-size:18px">{{Namear}}</span>
+    <br>
+    <p> {{describtionar}}</p>
+    <p>{{STar}}</p>
+    <p>{{Taxar}}</p>
+
+</div><!-- billed-from -->
+</div><!-- invoice-header -->
+              
+                        <div class="card-body">
+                            <br>
+                            <div class="col-lg-3" id="start_at">
+                                    <label style="font-size: 14px;color:#419BB2 ;font-weight:bold;" for="exampleFormControlSelect1"> {{ __('home.exportTime') }} : </label>
+                                    <?php
+                                    $currentdata = \Carbon\Carbon::now()->addHours(3)->format("Y-m-d H:i:s");
+
+                                    ?>
+                                    <label style="font-size: 14px;color:#419BB2 ;font-weight:bold;" for="exampleFormControlSelect1"> {{ $currentdata }}</label>
+
+                                </div>
+                        <?php $i = 0;
+                            $totalprice = 0;
+                            $totalAddedvalue = 0; ?>
+                          @foreach( $data['transctions'] as $invoice)
+
+                            <div style="padding: 0 0 0 40%" class="table-responsive mg-t-30 mb-3">
+                                <table class="table table-invoice border text-md-nowrap mb-0 table-bordered table-striped text-center" id="tableTotalPrice"
+                                    name="tableTotalPrice"width="50%">
+                                    
+                                    
+                                    
+    
+                                    <tbody>
+                                    <tr>
+                                            <td> {{__('home.Invoice_no')}}</td>
+                                            <td>{{$invoice->id}}</td>
+                                        </tr>
+                                                  @if($invoice->reciveInvoiceNumber==0)
+
+                                    <tr>
+                                            <th class="border-bottom-0">{{__('home.branch_sender')}}</th>
+                                            <th class="border-bottom-0">{{$invoice->branchfrom->name??''}}</th>
+                                        </tr>
+                                        <tr>
+                                            <td> {{__('home.employeesender')}}</td>
+                                            <td>{{$invoice->userfrom->name??''}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{__('home.branch_reciver')}}</td>
+                                            <td>{{$invoice->branchto->name??''}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>     {{ __('home.employeereciver') }}</td>
+     
+                                            <td>{{$invoice->userto->name??''}}</td>
+                                        </tr>
+                                   @else
+                                   
+                                       <tr>
+                                            <th class="border-bottom-0">{{__('home.branch_sender')}}</th>
+                                             <td>{{$invoice->branchto->name??''}}</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td> {{__('home.employeesender')}}</td>
+                                             <td>{{$invoice->userto->name??''}}</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>{{__('home.branch_reciver')}}</td>
+                                            <th class="border-bottom-0">{{$invoice->branchfrom->name??''}}</th>
+
+                                        </tr>
+                                        <tr>
+                                            <td>     {{ __('home.employeereciver') }}</td>
+                                                 <td>{{$invoice->userfrom->name??''}}</td>
+
+                                        </tr>
+                                   
+                                      <tr>
+                                            <td> {{__('home.send_invoice_no')}} </td>
+                                                 <td>{{$invoice->send_invoice_number??'-'}}</td>
+
+                                        </tr>
+                                   
+                                   @endif
+                                     
+                                        <tr>
+                                            <td>{{__('home.date')}}</td>
+                                            <td>{{$invoice->created_at??''}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ __('home.stautes') }}</td>
+                                          @if($invoice->reciveInvoiceNumber==0)
+                                        <td data-target="numberofpice" style="background-color:red;color:white">{{__('home.sendproduct')}}
+                                        </td>
+                                        @else
+                                        <td data-target="numberofpice" style="background-color:green;color:white">{{__('home.reciveproduct')}}
+                                        </td>
+                                        @endif                    
+                                        </tr>
+                                    </tbody>
+    
+                                </table>
+                                
+                                </form>
+                                <br>
+                            </div>
+
+
+
+                      
+                <div class="table-responsive">
+                    <table id="example" class="table key-buttons text-md-nowrap table-bordered table-striped text-center" name='prodyctsavaliable'>
+                        <thead>
+                        <tr>
+                                    <th> # </th>
+                                    <th>{{ __('home.productNo') }} </th>
+                                    <th>{{ __('home.product') }}</th>
+                                    <th>{{ __('home.quantity') }}</th>
+                                    <th>{{ __('home.thecostProduct') }}</th>
+                                    <th>{{ __('home.total') }}</th>
+                                </tr>
+                        </thead>
+                        <tbody>
+                           <?php
+                           $i = 0;
+                           ?>
+                            @foreach (App\Models\product_movement_another_branch_items::where('order_id', $invoice->id)->get() as $product)
+                            <?php $i++;
+                            $totalprice += $product->cost_per_each_withoud_tax*$product->quantity;
+                            $avtSaleRate = App\Models\Avt::find(2);
+                            $avtSaleRate = $avtSaleRate->AVT;
+                            $totalAddedvalue =( $product->cost_per_each_withoud_tax*$product->quantity)* $avtSaleRate ;
+                             ?>
+                            <tr>
+                                <td>{{ $i }}</td>
+                                <td dir=ltr>{{$product->product->Product_Code??""}}</td>
+                                <td>{{$product->product->product_name??""}}</td>
+                                <td>{{$product->quantity??""}}</td>
+                                <td>{{$product->cost_per_each_withoud_tax??""}}</td>
+                                <td>{{$product->cost_per_each_withoud_tax*$product->quantity??""}}</td>
+
+                            <tr>
+                                @endforeach
+                        </tbody>
+                    </table>
+                    @endforeach
+                    <br>
+                    <br>
+                    <br>
+                    <div class="table-responsive mg-t-30 table-padding">
+                        <table class="table table-invoice border text-md-nowrap mb-0 table-bordered table-striped text-center" id="tableTotalPrice" name="tableTotalPrice" width="50%">
+                            <col style="width:15%">
+                            <col style="width:15%">
+                            <col style="width:15%">
+                            <thead>
+                                <tr>
+                                    <th class="border-bottom-0">{{ __('home.the amount') }}</th>
+                                    <th class="border-bottom-0">{{ __('home.addedValue') }}</th>
+                                    <th class="border-bottom-0">{{ __('home.total') }} </th>
+
+                                </tr>
+                            </thead>
+
+                            <body>
+                                <tr>
+                                    <td> {{$totalprice }}</td>
+                                    <td>{{$totalAddedvalue}}</td>
+                                    <td>{{$totalAddedvalue+ $totalprice}}</td>
+                                </tr>
+
+                            </body>
+
+                        </table>
+                       
+                      
+                        </form>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+
+
+    </div>
+
+
+                   
+                    </div>
+                </div>
+            </div>
+        </div><!-- COL-END -->
+    </div>
+    <!-- row closed -->
+    </div>
+    <!-- Container closed -->
+    </div>
+    <!-- main-content closed -->
+@endsection
+@section('js')
+    <!--Internal  Chart.bundle js -->
+    <script src="{{ URL::asset('assets/plugins/chart.js/Chart.bundle.min.js') }}"></script>
+
+
+    <script type="text/javascript">
+        function printDiv() {
+            var printContents = document.getElementById('print').innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+            location.reload();
+        }
+
+    </script>
+
+@endsection

@@ -1,0 +1,14 @@
+{
+  "name": "AHD PL - نظام النقليات",
+  "short_name": "AHD PL",
+  "start_url": "/ar/dashboard",
+  "display": "standalone",
+  "dir": "rtl",
+  "lang": "ar",
+  "background_color": "#F4F7FB",
+  "theme_color": "#0B1A33",
+  "icons": [
+    { "src": "/assets/img/brand/favicon.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/assets/img/brand/favicon.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
